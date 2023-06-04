@@ -154,11 +154,13 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         commentsData:{
+          ...state.commentsData,
           [action.payload.commentId]:{
-        id:action.payload.commentId,
-        text: action.payload.comment,
-        nestedComment:prevComment.nestedComment
-          }}
+            id:action.payload.commentId,
+            text: action.payload.comment,
+            nestedComments:prevComment.nestedComments
+              }
+        }
       }
     default:
       return state;
