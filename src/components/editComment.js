@@ -17,7 +17,6 @@ function EditComment({ editComment, commentId, commentText}) {
     setError(null);
     handleClose();
     editComment(commentId,text);
-    alert("done")
   };
 
   const handleClose = () => {

@@ -64,7 +64,6 @@ const rootReducer = (state = initialState, action) => {
         commentID:state.commentID+1,
       };
     case "DELETE_COMMENT":
-      alert(JSON.stringify(action.payload))
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -83,7 +82,6 @@ const rootReducer = (state = initialState, action) => {
     case "ADD_NESTED_COMMENT":
       const parentComment=state.commentsData[action.payload.commentId];
       const parrentCommentId =state.commentsData[action.payload.commentId].id;
-      console.log("payload"+JSON.stringify(action.payload))
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -153,7 +151,6 @@ const rootReducer = (state = initialState, action) => {
       };
     case "EDIT_COMMENT":
       const prevComment = state.commentsData[action.payload.commentId]
-      alert(prevComment)
       return {
         ...state,
         commentsData:{

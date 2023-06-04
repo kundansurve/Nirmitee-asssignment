@@ -53,7 +53,6 @@ const Comment = ({
               Add Nested Comment
             </Button>
           </Form>
-          {console.log(commentsData)}
           {comment.nestedComments.map((nestedComment) => (
             (comments.includes(nestedComment.id))?
             <Comment
