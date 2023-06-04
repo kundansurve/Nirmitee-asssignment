@@ -3,7 +3,9 @@ export const DELETE_NESTED_COMMENT = 'DELETE_NESTED_COMMENT';
 
 const initialState = {
     posts: [],
-    comments:{}
+    comments:[],
+    commentsData:[],
+    commentID:0
   };
 
 const rootReducer = (state = initialState, action) => {
@@ -32,6 +34,7 @@ const rootReducer = (state = initialState, action) => {
         posts: state.posts.filter((post) => post.id !== action.payload.postId),
       };
     case "ADD_COMMENT":
+      const commentId=state.commentID+1;
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -41,7 +44,7 @@ const rootReducer = (state = initialState, action) => {
                 comments: [
                   ...post.comments,
                   {
-                    id: action.payload.commentId,
+                    id: state.commentID+1,
                     text: action.payload.commentText,
                     nestedComments: [],
                   },
@@ -49,8 +52,19 @@ const rootReducer = (state = initialState, action) => {
               }
             : post
         ),
+        comments:[...state.comments,state.commentID+1],
+        commentsData:{
+          ...state.commentsData,
+          [commentId]:{
+            id: state.commentID+1,
+            text: action.payload.commentText,
+            nestedComments: [],
+          }
+        },
+        commentID:state.commentID+1,
       };
     case "DELETE_COMMENT":
+      alert(JSON.stringify(action.payload))
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -63,8 +77,13 @@ const rootReducer = (state = initialState, action) => {
               }
             : post
         ),
+        comments:state.comments.filter((commentId)=>commentId!= action.payload.commentId
+        ),
       };
     case "ADD_NESTED_COMMENT":
+      const parentComment=state.commentsData[action.payload.commentId];
+      const parrentCommentId =state.commentsData[action.payload.commentId].id;
+      console.log("payload"+JSON.stringify(action.payload))
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -78,7 +97,7 @@ const rootReducer = (state = initialState, action) => {
                         nestedComments: [
                           ...comment.nestedComments,
                           {
-                            id: action.payload.nestedCommentId,
+                            id: state.commentID+1,
                             text: action.payload.nestedCommentText,
                             nestedComments: [],
                           },
@@ -88,9 +107,27 @@ const rootReducer = (state = initialState, action) => {
                 ),
               }
             : post
+            
         ),
+        comments:[...state.comments,state.commentID+1],
+        commentsData:{
+          ...state.commentsData,
+          [parrentCommentId]:{
+            ...parentComment,
+            nestedComments:[...parentComment.nestedComments,{
+              id: state.commentID+1,
+              text: parentComment.text,
+              nestedComments: [],
+            }]
+          },
+          [state.commentID+1]:{
+            id: state.commentID+1,
+            text: action.payload.nestedCommentText,
+            nestedComments: [],
+          }
+        },commentID:state.commentID+1
       };
-    case "EDIT_COMMENT":
+    case "DELETE_NESTED_COMMENT":
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -111,29 +148,21 @@ const rootReducer = (state = initialState, action) => {
               }
             : post
         ),
+        comments:state.comments.filter((commentId)=>commentId=== action.payload.commentId
+        )
       };
-      case "DELETE_NESTED_COMMENT":
-        return {
-          ...state,
-          posts: state.posts.map((post) =>
-            post.id === action.payload.postId
-              ? {
-                  ...post,
-                  comments: post.comments.map((comment) =>
-                    comment.id === action.payload.commentId
-                      ? {
-                          ...comment,
-                          nestedComments: comment.nestedComments.filter(
-                            (nestedComment) =>
-                              nestedComment.id !== action.payload.nestedCommentId
-                          ),
-                        }
-                      : comment
-                  ),
-                }
-              : post
-          ),
-        };
+    case "EDIT_COMMENT":
+      const prevComment = state.commentsData[action.payload.commentId]
+      alert(prevComment)
+      return {
+        ...state,
+        commentsData:{
+          [action.payload.commentId]:{
+        id:action.payload.commentId,
+        text: action.payload.comment,
+        nestedComment:prevComment.nestedComment
+          }}
+      }
     default:
       return state;
   }

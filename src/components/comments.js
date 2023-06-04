@@ -1,11 +1,16 @@
 import { Card, Button, Form } from "react-bootstrap";
 import { useState } from "react";
+import EditComment from "./editComment";
 
 const Comment = ({
+    comments,
+    commentsData,
     comment,
     postId,
+    deleteComment,
     addNestedComment,
     deleteNestedComment,
+    editComment
   }) => {
     const [nestedCommentText, setNestedCommentText] = useState('');
   
@@ -24,10 +29,12 @@ const Comment = ({
           <Card.Text>{comment.text}</Card.Text>
           <Button
             variant="danger"
-            onClick={() => handleDeleteNestedComment(comment.id)}
+            onClick={() => deleteComment(postId,comment.id)}
+            type="button"
           >
             Delete Comment
           </Button>
+          <EditComment editComment={editComment} commentId={comment.id} commentText={comment.text}/>
           
           <Form className="mt-3">
             <Form.Group controlId={`nested-comment-${comment.id}`}>
@@ -41,18 +48,23 @@ const Comment = ({
             <Button
               variant="primary"
               onClick={handleAddNestedComment}
+              type="button"
             >
               Add Nested Comment
             </Button>
           </Form>
+          {console.log(commentsData)}
           {comment.nestedComments.map((nestedComment) => (
+            (comments.includes(nestedComment.id))?
             <Comment
               key={nestedComment.id}
-              comment={nestedComment}
+              comment={commentsData[nestedComment.id]}
               postId={postId}
               addNestedComment={addNestedComment}
+              deleteComment={deleteComment}
               deleteNestedComment={deleteNestedComment}
-            />
+              editComment={editComment}
+            />:null
           ))}
         </Card.Body>
       </Card>

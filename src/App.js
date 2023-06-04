@@ -8,6 +8,7 @@ import {
   deleteComment,
   addNestedComment,
   deleteNestedComment,
+  editComment
 } from "./actions";
 import { Card, Button, Form, Container, Row, Col } from "react-bootstrap";
 import Post from "./components/Posts";
@@ -15,7 +16,8 @@ import Nav from "react-bootstrap/Nav";
 import CreatePost from "./components/createPost";
 
 const App = ({
-  posts,
+  posts,comments,
+  commentsData,
   addPost,
   editPost,
   deletePost,
@@ -23,6 +25,7 @@ const App = ({
   deleteComment,
   addNestedComment,
   deleteNestedComment,
+  editComment
 }) => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
@@ -55,6 +58,8 @@ const App = ({
           {posts.map((post) => (
             <Col md={6} key={post.id}>
               <Post
+              comments={comments}
+              commentsData={commentsData}
                 post={post}
                 deletePost={handleDeletePost}
                 addComment={addComment}
@@ -62,6 +67,7 @@ const App = ({
                 addNestedComment={addNestedComment}
                 deleteNestedComment={deleteNestedComment}
                 editPost={handleEditPost}
+                editComment={editComment}
               />
             </Col>
           ))}
@@ -74,6 +80,8 @@ const App = ({
 const mapStateToProps = (state) => {
   return {
     posts: state.posts,
+    comments:state.comments,
+    commentsData:state.commentsData
   };
 };
 
@@ -85,6 +93,7 @@ const mapDispatchToProps = {
   deleteComment,
   addNestedComment,
   deleteNestedComment,
+  editComment
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

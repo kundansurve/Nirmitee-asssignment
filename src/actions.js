@@ -9,7 +9,7 @@ export const DELETE_NESTED_COMMENT = 'DELETE_NESTED_COMMENT';
 
 // Action Creators
 export const addPost = (title, content) => ({
-  type: ADD_POST,
+  type: "ADD_POST",
   payload: {
     id: new Date().getTime().toString(),
     title,
@@ -19,7 +19,7 @@ export const addPost = (title, content) => ({
 });
 
 export const editPost = (postId, title, content) => ({
-  type: EDIT_POST,
+  type: "EDIT_POST",
   payload: {
     postId,
     title,
@@ -28,14 +28,14 @@ export const editPost = (postId, title, content) => ({
 });
 
 export const deletePost = (postId) => ({
-  type: DELETE_POST,
+  type: "DELETE_POST",
   payload: {
     postId,
   },
 });
 
 export const addComment = (postId, commentText) => ({
-  type: ADD_COMMENT,
+  type: "ADD_COMMENT",
   payload: {
     postId,
     commentId: new Date().getTime().toString(),
@@ -43,16 +43,16 @@ export const addComment = (postId, commentText) => ({
   },
 });
 
-export const deleteComment = (postId, commentId) => ({
-  type: DELETE_COMMENT,
+export const deleteComment = (postId, commentId) =>{return ({
+  type: "DELETE_COMMENT",
   payload: {
     postId,
     commentId,
   },
-});
+});}
 
 export const addNestedComment = (postId, commentId, nestedCommentText) => ({
-  type: ADD_NESTED_COMMENT,
+  type: "ADD_NESTED_COMMENT",
   payload: {
     postId,
     commentId,
@@ -62,10 +62,18 @@ export const addNestedComment = (postId, commentId, nestedCommentText) => ({
 });
 
 export const deleteNestedComment = (postId, commentId, nestedCommentId) => ({
-  type: DELETE_NESTED_COMMENT,
+  type: "DELETE_NESTED_COMMENT",
   payload: {
     postId,
     commentId,
     nestedCommentId,
   },
 });
+
+export const editComment = (commentId,comment)=>({
+  type: "EDIT_COMMENT",
+  payload:{
+    commentId,
+    comment
+  }
+})
